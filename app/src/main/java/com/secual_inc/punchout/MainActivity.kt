@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -58,19 +59,15 @@ fun MainScreen() {
 
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
 
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-
     val scope = rememberCoroutineScope()
 
     val navController = rememberNavController()
-
-    val calModel = CalendarViewModel()
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(scope = scope, scaffoldState = scaffoldState) },
         drawerBackgroundColor = Color(red = 32, green = 32, blue = 32),
-        drawerShape = customShape(),
+//        drawerShape = customShape(),
         drawerContent = {
             MenuDrawer(scope = scope, scaffoldState = scaffoldState, navController = navController)
         },
@@ -100,7 +97,7 @@ fun MainScreen() {
 
                     Column {
 
-                        CalendarScreen(calViewModel = calModel)
+                        CalendarScreen()
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -110,8 +107,8 @@ fun MainScreen() {
                             Button(
                                 onClick = {},
                                 modifier = Modifier
+                                    .height(50.dp)
                                     .background(Color.Transparent),
-//                                    .padding(20.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.Transparent,
                                     contentColor = Color.White,
@@ -126,8 +123,8 @@ fun MainScreen() {
                             Button(
                                 onClick = {},
                                 modifier = Modifier
+                                    .height(50.dp)
                                     .background(Color.Transparent),
-//                                    .padding(20.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.Transparent,
                                     contentColor = Color.White,

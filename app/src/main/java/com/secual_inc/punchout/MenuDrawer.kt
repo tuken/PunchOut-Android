@@ -32,27 +32,24 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
 
     Column(modifier = Modifier
         .background(Color(red = 32, green = 32, blue = 32))) {
-//        .width(300.dp)
-//        .fillMaxHeight()) {
 
-        // Header
-//        Image(
-//            painter = painterResource(id = R.drawable.logo),
-//            contentDescription = R.drawable.logo.toString(),
-//            modifier = Modifier
-//                .height(100.dp)
-//                .fillMaxWidth()
-//                .padding(10.dp)
-//        )
+        Image(
+            painter = painterResource(id = R.drawable.secual),
+            contentDescription = null,
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp))
+            .height(20.dp))
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+//        val currentRoute = navBackStackEntry?.destination?.route
 
-        MenuDrawerItem(route = "main", title = "Profile", icon = R.drawable.ic_person, onItemClick = {
+        MenuDrawerItem(route = "main", title = "Setting", icon = R.drawable.ic_settings, onItemClick = {
 
 //            navController.navigate(it.route) {
 //
@@ -65,6 +62,17 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
 //                launchSingleTop = true
 //                restoreState = true
 //            }
+
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        })
+
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(20.dp))
+
+        MenuDrawerItem(route = "logout", title = "Logout", icon = R.drawable.ic_exit, onItemClick = {
 
             scope.launch {
                 scaffoldState.drawerState.close()

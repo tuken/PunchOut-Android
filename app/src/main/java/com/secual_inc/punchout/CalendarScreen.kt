@@ -27,10 +27,6 @@ import java.util.*
 @Composable
 fun CalendarScreen(calViewModel: CalendarViewModel = viewModel()) {
 
-//    val timer = Timer()
-//
-//    val tick = Tick()
-
     val observer = remember {
 
         LifecycleEventObserver { _, event ->
@@ -165,8 +161,6 @@ fun CalendarPreview() {
 
     PunchOutTheme {
 
-//        val calModel = CalendarViewModel()
-//        calModel.start()
         CalendarScreen()
     }
 }
