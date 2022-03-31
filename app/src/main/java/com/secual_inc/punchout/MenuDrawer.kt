@@ -2,7 +2,6 @@ package com.secual_inc.punchout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -11,15 +10,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -28,10 +23,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController) {
+fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, menus: Array<MenuItem>) {
 
-    Column(modifier = Modifier
-        .background(Color(red = 32, green = 32, blue = 32))) {
+    Column(
+        modifier = Modifier
+            .background(Color(red = 32, green = 32, blue = 32))
+    ) {
 
         Image(
             painter = painterResource(id = R.drawable.secual),
@@ -42,37 +39,44 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
                 .padding(10.dp)
         )
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(20.dp))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(20.dp)
+        )
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 //        val currentRoute = navBackStackEntry?.destination?.route
 
-        MenuDrawerItem(route = "main", title = "Setting", icon = R.drawable.ic_settings, onItemClick = {
+        for (m in menus) {
 
-//            navController.navigate(it.route) {
-//
-//                navController.graph.startDestinationRoute?.let { route ->
-//                    popUpTo(route) {
-//                        saveState = true
-//                    }
-//                }
-//
-//                launchSingleTop = true
-//                restoreState = true
-//            }
+            MenuItemDrawer(route = m.route, title = m.title, icon = m.icon, onItemClick = {
 
-            scope.launch {
-                scaffoldState.drawerState.close()
-            }
-        })
+                navController.navigate(m.route) {
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(20.dp))
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
 
-        MenuDrawerItem(route = "logout", title = "Logout", icon = R.drawable.ic_exit, onItemClick = {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+
+                scope.launch {
+                    scaffoldState.drawerState.close()
+                }
+            })
+        }
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(20.dp)
+        )
+
+        MenuItemDrawer(route = "logout", title = "Logout", icon = R.drawable.ic_exit, onItemClick = {
 
             scope.launch {
                 scaffoldState.drawerState.close()
@@ -93,41 +97,6 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
     }
 }
 
-@Composable
-fun MenuDrawerItem(route: String, title: String, icon: Int, onItemClick: (String) -> Unit) {
-
-//    val background = if (selected) R.color.teal_200 else android.R.color.transparent
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onItemClick(route) })
-            .height(45.dp)
-            .background(colorResource(id = android.R.color.transparent))
-            .padding(start = 10.dp)
-    ) {
-
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = title,
-            colorFilter = ColorFilter.tint(Color.White),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .height(35.dp)
-                .width(35.dp)
-        )
-
-        Spacer(modifier = Modifier.width(7.dp))
-
-        Text(
-            text = title,
-            fontSize = 18.sp,
-            color = Color.White
-        )
-    }
-}
-
 @Preview
 @Composable
 fun DrawerPreview() {
@@ -140,6 +109,6 @@ fun DrawerPreview() {
 
         val navController = rememberNavController()
 
-        MenuDrawer(scope, scaffoldState, navController)
+        MenuDrawer(scope, scaffoldState, navController, arrayOf(MenuItem.Settings))
     }
 }
