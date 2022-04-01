@@ -23,7 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, menus: Array<MenuItem>) {
+fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, menus: List<MenuItem>) {
 
     Column(
         modifier = Modifier
@@ -48,21 +48,22 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 //        val currentRoute = navBackStackEntry?.destination?.route
 
-        for (m in menus) {
+        menus.forEach { m ->
 
-            MenuItemDrawer(route = m.route, title = m.title, icon = m.icon, onItemClick = {
+            MenuItemDrawer(item = m, onItemClick = {
 
-                navController.navigate(m.route) {
-
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
-                        }
-                    }
-
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                navController.navigate(m.route)
+//                navController.navigate(m.route) {
+//
+//                    navController.graph.startDestinationRoute?.let { route ->
+//                        popUpTo(route) {
+//                            saveState = true
+//                        }
+//                    }
+//
+//                    launchSingleTop = true
+//                    restoreState = true
+//                }
 
                 scope.launch {
                     scaffoldState.drawerState.close()
@@ -76,7 +77,7 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
                 .height(20.dp)
         )
 
-        MenuItemDrawer(route = "logout", title = "Logout", icon = R.drawable.ic_exit, onItemClick = {
+        MenuItemDrawer(item = MenuItem.Logout, onItemClick = {
 
             scope.launch {
                 scaffoldState.drawerState.close()
@@ -109,6 +110,6 @@ fun DrawerPreview() {
 
         val navController = rememberNavController()
 
-        MenuDrawer(scope, scaffoldState, navController, arrayOf(MenuItem.Settings))
+        MenuDrawer(scope, scaffoldState, navController, listOf(MenuItem.Settings))
     }
 }

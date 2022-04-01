@@ -43,7 +43,7 @@ fun MainScreen() {
 
     val navController = rememberNavController()
 
-    val menus = arrayOf<MenuItem>(MenuItem.Settings)
+    val menus = listOf<MenuItem>(MenuItem.Settings)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -80,11 +80,8 @@ fun MainScreen() {
                 }
             }
 
-            for (m in menus) {
-                composable(m.route) {
-
-                    m.screen
-                }
+            menus.forEach { m ->
+                composable(route = m.route, content = m.screen)
             }
         }
     }

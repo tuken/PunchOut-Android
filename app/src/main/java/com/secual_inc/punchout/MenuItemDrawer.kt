@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MenuItemDrawer(route: String, title: String, icon: Int, onItemClick: (String) -> Unit) {
+fun MenuItemDrawer(item: MenuItem, onItemClick: (MenuItem) -> Unit) {
 
 //    val background = if (selected) R.color.teal_200 else android.R.color.transparent
 
@@ -26,15 +26,15 @@ fun MenuItemDrawer(route: String, title: String, icon: Int, onItemClick: (String
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onItemClick(route) })
+            .clickable(onClick = { onItemClick(item) })
             .height(45.dp)
             .background(colorResource(id = R.color.transparent))
             .padding(start = 10.dp)
     ) {
 
         Image(
-            painter = painterResource(id = icon),
-            contentDescription = title,
+            painter = painterResource(id = item.icon),
+            contentDescription = item.title,
             colorFilter = ColorFilter.tint(Color.White),
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -44,7 +44,7 @@ fun MenuItemDrawer(route: String, title: String, icon: Int, onItemClick: (String
         )
 
         Text(
-            text = title,
+            text = item.title,
             fontSize = 18.sp,
             color = Color.White
         )
