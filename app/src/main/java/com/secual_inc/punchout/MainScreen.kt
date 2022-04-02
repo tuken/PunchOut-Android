@@ -47,7 +47,7 @@ fun MainScreen() {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(scope = scope, scaffoldState = scaffoldState) },
+        topBar = { TopBar(scope = scope, scaffoldState = scaffoldState, navController = navController) },
         drawerBackgroundColor = Color(red = 32, green = 32, blue = 32),
 //        drawerShape = customShape(),
         drawerContent = {

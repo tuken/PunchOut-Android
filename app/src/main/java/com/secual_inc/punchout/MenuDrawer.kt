@@ -52,8 +52,8 @@ fun MenuDrawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navControlle
 
             MenuItemDrawer(item = m, onItemClick = {
 
-                navController.navigate(m.route)
-//                navController.navigate(m.route) {
+                navController.navigate(it.route)
+//                navController.navigate(it.route) {
 //
 //                    navController.graph.startDestinationRoute?.let { route ->
 //                        popUpTo(route) {
