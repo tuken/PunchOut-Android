@@ -2,10 +2,10 @@ package com.secual_inc.punchout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,6 +14,10 @@ import com.secual_inc.punchout.ui.theme.PunchOutTheme
 
 @Composable
 fun HomeScreen() {
+
+    val showInAlert = remember { mutableStateOf(false) }
+
+    val showOutAlert = remember { mutableStateOf(false) }
 
     Column {
 
@@ -25,8 +29,11 @@ fun HomeScreen() {
         ) {
 
             Button(
-                onClick = {},
+                onClick = {
+                    showInAlert.value = true
+                },
                 modifier = Modifier
+                    .width(150.dp)
                     .height(50.dp)
                     .background(Color.Transparent),
                 colors = ButtonDefaults.buttonColors(
@@ -41,8 +48,11 @@ fun HomeScreen() {
             }
 
             Button(
-                onClick = {},
+                onClick = {
+                    showOutAlert.value = true
+                },
                 modifier = Modifier
+                    .width(150.dp)
                     .height(50.dp)
                     .background(Color.Transparent),
                 colors = ButtonDefaults.buttonColors(
@@ -56,6 +66,44 @@ fun HomeScreen() {
                 )
             }
         }
+    }
+
+    if (showInAlert.value) {
+
+        AlertDialog(
+            onDismissRequest = {},
+            title = {
+                Text(text = "出勤処理")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showInAlert.value = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+        )
+    }
+
+    if (showOutAlert.value) {
+
+        AlertDialog(
+            onDismissRequest = {},
+            title = {
+                Text(text = "退勤処理")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showOutAlert.value = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+        )
     }
 }
 
