@@ -57,8 +57,12 @@ fun MainScreen() {
 
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "splash",
         ) {
+
+            composable("splash") {
+                SplashScreen(navController)
+            }
 
             composable("home") {
 
