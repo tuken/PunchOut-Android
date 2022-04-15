@@ -1,12 +1,12 @@
 package com.secual_inc.punchout
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberDrawerState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -17,10 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,10 +37,13 @@ fun customShape() = object : Shape {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen() {
 
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+
+    val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val scope = rememberCoroutineScope()
 
@@ -45,47 +51,55 @@ fun MainScreen() {
 
     val menus = listOf<MenuItem>(MenuItem.Settings)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = { TopBar(scope = scope, scaffoldState = scaffoldState, navController = navController) },
-        drawerBackgroundColor = Color(red = 32, green = 32, blue = 32),
-//        drawerShape = customShape(),
-        drawerContent = {
-            MenuDrawer(scope = scope, scaffoldState = scaffoldState, navController = navController, menus = menus)
-        },
-    ) {
+    ModalBottomSheetLayout(sheetContent = {
+        BottomSheetContent()
+    },
+        sheetState = modalBottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetBackgroundColor = Color(red = 1, green = 172, blue = 200)) {
 
-        NavHost(
-            navController = navController,
-            startDestination = "splash",
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = { TopBar(scope = scope, scaffoldState = scaffoldState, navController = navController) },
+            drawerBackgroundColor = Color(red = 32, green = 32, blue = 32),
+//        drawerShape = customShape(),
+            drawerContent = {
+                MenuDrawer(scope = scope, scaffoldState = scaffoldState, navController = navController, menus = menus)
+            },
         ) {
 
-            composable("splash") {
-                SplashScreen(navController)
-            }
+            NavHost(
+                navController = navController,
+                startDestination = "splash",
+            ) {
 
-            composable("home") {
-
-                BoxWithConstraints(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.background),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        alignment = Alignment.Center,
-                        contentScale = ContentScale.FillHeight
-                    )
-
-                    HomeScreen()
+                composable("splash") {
+                    SplashScreen(navController)
                 }
-            }
 
-            menus.forEach { m ->
-                composable(route = m.route, content = m.screen)
+                composable("home") {
+
+                    BoxWithConstraints(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            alignment = Alignment.Center,
+                            contentScale = ContentScale.FillHeight
+                        )
+
+                        HomeScreen(scope = scope, sheetState = modalBottomSheetState)
+                    }
+                }
+
+                menus.forEach { m ->
+                    composable(route = m.route, content = m.screen)
+                }
             }
         }
     }
@@ -98,5 +112,68 @@ fun MainPreview() {
     PunchOutTheme {
 
         MainScreen()
+    }
+}
+
+@Composable
+fun BottomSheetListItem(icon: Int, title: String, onItemClick: (String) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onItemClick(title) })
+            .height(100.dp)
+            .background(color = Color(red = 1, green = 172, blue = 200))
+            .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(painter = painterResource(id = icon), contentDescription = "Share", tint = Color.White)
+        Spacer(modifier = Modifier.width(20.dp))
+        Text(text = title, color = Color.White)
+    }
+}
+
+@Composable
+fun BottomSheetContent() {
+    val context = LocalContext.current
+    Column {
+        BottomSheetListItem(
+            icon = R.drawable.ic_person,
+            title = "Share",
+            onItemClick = { title ->
+                Toast.makeText(
+                    context,
+                    title,
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+        BottomSheetListItem(
+            icon = R.drawable.ic_settings,
+            title = "Get link",
+            onItemClick = { title ->
+                Toast.makeText(
+                    context,
+                    title,
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+//        BottomSheetListItem(
+//            icon = R.drawable.ic_exit,
+//            title = "Edit name",
+//            onItemClick = { title ->
+//                Toast.makeText(
+//                    context,
+//                    title,
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            })
+//        BottomSheetListItem(
+//            icon = R.drawable.ic_person,
+//            title = "Delete collection",
+//            onItemClick = { title ->
+//                Toast.makeText(
+//                    context,
+//                    title,
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            })
     }
 }
